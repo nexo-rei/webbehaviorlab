@@ -1,0 +1,161 @@
+WebBehaviorLab Custom License
+Version 1.0.0 — Effective Date: 2026-01-01
+
+Copyright (c) 2026 the WebBehaviorLab Project and its copyright holders.
+All rights reserved.
+
+---------------------------------------------------------------------------
+1. DEFINITIONS
+
+  "The Software" means WebBehaviorLab, including its source code,
+  documentation, configuration files, and any derived works.
+
+  "Copyright Holder" means the original authors and maintainers of
+  WebBehaviorLab listed in the repository metadata, and any successor
+  maintainers they appoint.
+
+  "You" means any individual or organization that obtains, uses, copies,
+  modifies, or distributes the Software.
+
+  "Written Permission" means express, prior, written consent obtained
+  directly from the Copyright Holder (for example, by email from an
+  address published by the Copyright Holder), specifically naming the
+  permission granted.
+
+  "Authorized Testing" means testing performed exclusively against
+  computer systems, servers, or websites that You own, operate, or have
+  documented permission from the owner to test.
+
+---------------------------------------------------------------------------
+2. GRANTED PERMISSIONS
+
+  Subject to the conditions in Section 4, the Copyright Holder grants You
+  a limited, non-exclusive, non-transferable, revocable permission to:
+
+  a) Use the Software for personal, non-commercial purposes;
+
+  b) Use the Software for educational purposes, including in personal
+     study, classroom instruction, and self-directed learning;
+
+  c) Run the Software on hardware You control, including personal
+     computers and mobile devices (for example, via Termux);
+
+  d) Use the Software for Authorized Testing of websites and services;
+
+  e) Read, study, and learn from the Software's source code;
+
+  f) Make modifications to the Software for Your own personal, internal
+     use, provided You do not distribute those modifications (see
+     Section 3.c).
+
+---------------------------------------------------------------------------
+3. RESTRICTIONS
+
+  The following are NOT permitted without prior Written Permission from
+  the Copyright Holder:
+
+  a) Selling, sublicensing, renting, or leasing the Software, in whole or
+     in part, or charging fees for its distribution;
+
+  b) Commercial redistribution of the Software, including bundling it
+     with commercial products or offering it as part of a paid service;
+
+  c) Publishing, distributing, or otherwise making available modified
+     versions of the Software, forks intended for public distribution,
+     or derivative works of the Software;
+
+  d) Rebranding the Software, or distributing it under a different name,
+     identity, or purported origin;
+
+  e) Removing, obscuring, or altering attribution notices, copyright
+     notices, license notices, or authorship information contained in
+     the Software;
+
+  f) Presenting the Software, in whole or in part, as Your own work, or
+     claiming authorship of the original Software;
+
+  g) Using the Software for any purpose other than Authorized Testing,
+     including but not limited to: generating artificial traffic toward
+     third-party services, manipulating analytics or advertising
+     metrics, evading bot detection or CAPTCHA systems, attacking
+     systems, or harvesting data from systems You are not authorized to
+     access.
+
+  Redistributing the unmodified Software verbatim, for free and with
+  this license intact, is permitted for non-commercial purposes (for
+  example, sharing a copy with a classmate or colleague) provided that
+  all attribution and license notices remain intact.
+
+---------------------------------------------------------------------------
+4. CONDITIONS OF USE
+
+  a) You may only use the Software against systems You own or for which
+     You hold documented authorization from the owner. You are solely
+     responsible for ensuring Your use complies with all applicable
+     laws and regulations in Your jurisdiction.
+
+  b) You may not attempt to circumvent the Software's built-in safety
+     limits (for example, the hard session limit) or remove its
+     authorization safeguards.
+
+  c) If You make internal modifications, You must retain this license
+     text and all attribution notices within the modified copies.
+
+  d) This license does not grant You any trademark rights. "WebBehaviorLab"
+     and related names and marks may not be used to promote derivative
+     products without Written Permission.
+
+---------------------------------------------------------------------------
+5. PERMISSION REQUESTS
+
+  Requests for Written Permission (commercial licensing, redistribution
+  of modified versions, rebranding, or other uses not covered above)
+  should be directed to the Copyright Holder via the contact information
+  published in the repository (for example, through the project's
+  security or contact page on GitHub).
+
+---------------------------------------------------------------------------
+6. TERMINATION
+
+  This license and the permissions granted herein terminate
+  automatically and immediately if You breach any of its terms. Upon
+  termination, You must cease all use of the Software and delete all
+  copies in Your possession or control. Sections 7, 8, and 9 survive
+  termination.
+
+---------------------------------------------------------------------------
+7. NO WARRANTY
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR
+  ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+  CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+  You assume full responsibility for the results of running the
+  Software, including responsibility for obtaining authorization for any
+  target You test.
+
+---------------------------------------------------------------------------
+8. EXPORT AND COMPLIANCE
+
+  You are responsible for compliance with any applicable export control
+  or local regulations when downloading, using, or sharing the Software.
+
+---------------------------------------------------------------------------
+9. GENERAL
+
+  If any provision of this license is held to be unenforceable, the
+  remaining provisions continue in full force and effect.
+
+  This is a custom license drafted for the WebBehaviorLab Project. It
+  has not been reviewed by a lawyer and no guarantee is made that it is
+  enforceable in every jurisdiction. If You need legal certainty about
+  Your permitted uses, consult a qualified lawyer in Your jurisdiction
+  and/or request explicit Written Permission from the Copyright Holder.
+
+  For the avoidance of doubt: this license is intentionally more
+  restrictive than the MIT, Apache 2.0, and GPL families of licenses and
+  is not compatible with them.

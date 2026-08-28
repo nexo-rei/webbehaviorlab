@@ -7,6 +7,7 @@ CHECK authorization -> session count -> live dashboard -> completion panel
 
 from __future__ import annotations
 
+import re
 from typing import Dict, Optional
 
 from rich.console import Console
@@ -398,10 +399,11 @@ class App:
                 title=" REPORTS ",
             )
             return
-        rows = [
-            {"test_id": path.name.split("-20")[0], "format": fmt.upper(), "file": path.name}
-            for path, fmt in reports[:20]
-        ]
+        id_re = re.compile(r"^(WB-\d{4}-\d{4})")
+        rows = []
+        for path, fmt in reports[:20]:
+            match = id_re.match(path.name)
+            rows.append({"test_id": match.group(1) if match else "--", "format": fmt.upper(), "file": path.name})
         self.console.print(report_table(rows, self.theme))
         self._line()
         self._line("Reports are stored in: {}".format(storage.reports_dir()), "muted")
@@ -457,14 +459,19 @@ class App:
         choice = self._ask("Animation ON/OFF").strip().lower()
         if choice in ("on", "off"):
             self.config.settings.animation = choice == "on"
-            self.animations.enabled = choice == "on"
             if choice == "on":
                 speed = self._ask("Speed ({})".format(" / ".join(ANIMATION_SPEEDS))).strip().lower()
                 if speed in ANIMATION_SPEEDS:
                     self.config.settings.animation_speed = speed
-                    self.animations.speed = speed
+                else:
+                    self.error_panel("Invalid speed", "Using '{}'.".format(self.config.settings.animation_speed))
             self.config.save()
-            self.success_panel("Saved", "Animation: {}".format(choice.upper()))
+            # Recreate the controller so the speed string maps to a proper
+            # multiplier (never assigned raw).
+            self._reload_style()
+            self.success_panel("Saved", "Animation: {} ({})".format(
+                "ON" if self.config.settings.animation else "OFF",
+                self.config.settings.animation_speed))
         else:
             self.error_panel("Invalid value", "Enter ON or OFF.")
 

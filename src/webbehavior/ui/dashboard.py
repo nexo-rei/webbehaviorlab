@@ -17,7 +17,6 @@ from rich.console import Console, Group, RenderableType
 from rich.live import Live
 from rich.panel import Panel
 from rich.text import Text
-from rich.tree import Tree
 
 from webbehavior.monitoring.tracker import STAGE_LABELS, LiveTracker
 from webbehavior.ui.progress import text_bar
@@ -47,59 +46,79 @@ _STATE_SYMBOLS = {
 def render_snapshot(snapshot: dict, manager: ThemeManager, width: Optional[int] = None) -> RenderableType:
     """Build the dashboard renderable from a tracker snapshot."""
     compact = compact_mode(width)
-    body_lines: list[Text] = []
+    # Resolve theme keys to concrete styles so the panel renders correctly
+    # on any console, themed or not.
+    c = {k: manager.style(k) for k in
+         ("primary", "accent", "success", "error", "running", "muted", "warning", "panel_border")}
+    label_w = 8   # header labels ("Sessions")
+    stage_w = 12  # stage labels ("Test Actions")
+    pad = " "
+    body: list[Text] = []
 
-    body_lines.append(Text.assemble(
-        ("Target", "muted"), ("       : " if not compact else ": "), (str(snapshot.get("target", "--")), "primary")
-    ))
+    def field(label: str, value: str, value_style: str) -> None:
+        body.append(Text.assemble(
+            (label.ljust(label_w), c["muted"]), (": ", c["muted"]), (value, value_style)
+        ))
+
+    field("Target", str(snapshot.get("target", "--")), c["primary"])
     done = int(snapshot.get("done", 0))
     total = int(snapshot.get("total", 0))
-    body_lines.append(Text.assemble(
-        ("Sessions", "muted"), ("     : ",), ("{:02d} / {:02d}".format(done, total), "accent bold")
-    ))
+    field("Sessions", "{:02d} / {:02d}".format(done, total), "bold " + c["accent"])
     status = str(snapshot.get("status", ""))
-    body_lines.append(Text.assemble(
-        ("Status", "muted"), ("      : ",), (status, "success" if status == "FINISHED" else "running")
-    ))
-    body_lines.append(Text(""))
+    field("Status", status, c["success"] if status == "FINISHED" else c["running"])
+    body.append(Text(""))
 
     # progress
     percent = int(snapshot.get("progress", 0))
     bar_width = 18 if compact else 26
-    body_lines.append(Text.assemble(
-        (text_bar(percent, width=bar_width), "success" if percent >= 100 else "running"),
-        (" {:d}%".format(percent), "accent bold"),
+    body.append(Text.assemble(
+        (text_bar(percent, width=bar_width), c["success"] if percent >= 100 else c["running"]),
+        (" {:d}%".format(percent), "bold " + c["accent"]),
     ))
-    body_lines.append(Text(""))
+    body.append(Text(""))
 
-    # current session tree
-    session_tree = Tree(Text("Current Session", style="accent bold"), guide_style="muted")
-    stages = snapshot.get("stages", {}) or {}
-    for key, label in STAGE_LABELS.items():
-        state, text = stages.get(key, ("pending", ""))
+    def branch(is_last: bool) -> str:
+        return " └─ " if is_last else " ├─ "
+
+    def stage_line(label: str, state: str, text: str, is_last: bool = False) -> None:
+        style = {"pending": c["muted"], "running": c["running"], "done": c["success"],
+                 "failed": c["error"], "info": c["primary"]}.get(state, c["muted"])
         symbol = _STATE_SYMBOLS.get(state, SYMBOLS.PENDING)
-        style = _STATE_STYLES.get(state, "muted")
-        parts = [(" ├─ " if key != "duration" else " └─ ", "muted"), (label.ljust(12 if not compact else 9), "primary"), (symbol + " ", style)]
+        parts = [
+            (branch(is_last), c["muted"]),
+            (label.ljust(stage_w) + pad, c["primary"]),
+            (symbol, style),
+        ]
         if text:
-            parts.append((text, style))
-        session_tree.add(Text.assemble(*parts))
+            parts.append((" " + text, style))
+        body.append(Text.assemble(*parts))
 
-    metrics_tree = Tree(Text("Metrics", style="accent bold"), guide_style="muted")
+    body.append(Text("Current Session", style="bold " + c["accent"]))
+    stages = snapshot.get("stages", {}) or {}
+    keys = list(STAGE_LABELS.keys())
+    for pos, key in enumerate(keys):
+        state, text = stages.get(key, ("pending", ""))
+        stage_line(STAGE_LABELS[key], state, text, is_last=(pos == len(keys) - 1))
+    body.append(Text(""))
+
+    def metric_line(label: str, value: str, is_last: bool = False) -> None:
+        body.append(Text.assemble(
+            (branch(is_last), c["muted"]),
+            (label.ljust(stage_w) + pad, c["primary"]),
+            (value, c["accent"]),
+        ))
+
     metrics = snapshot.get("metrics", {}) or {}
-
-    def metric_line(label: str, value: str) -> Text:
-        return Text.assemble((" ├─ ", "muted"), (label.ljust(12 if not compact else 9), "primary"), (value, "accent"))
-
-    metrics_tree.add(metric_line("Avg Latency", format_ms(metrics.get("avg_latency_ms"))))
-    metrics_tree.add(metric_line("Success", str(metrics.get("successful", 0))))
-    metrics_tree.add(Text.assemble((" └─ ", "muted"), ("Failed".ljust(12 if not compact else 9), "primary"), (str(metrics.get("failed", 0)), "accent")))
+    body.append(Text("Metrics", style="bold " + c["accent"]))
+    metric_line("Avg Latency", format_ms(metrics.get("avg_latency_ms")))
+    metric_line("Success", str(metrics.get("successful", 0)))
+    metric_line("Failed", str(metrics.get("failed", 0)), is_last=True)
 
     message = str(snapshot.get("message", "") or "")
-    header = " LIVE TEST "
     panel = Panel(
-        Group(*body_lines, session_tree, Text(""), metrics_tree, Text(message, style="warning") if message else Text("")),
-        title=header,
-        border_style=manager.style("panel_border"),
+        Group(*body, Text(message, style=c["warning"]) if message else Text("")),
+        title=" LIVE TEST ",
+        border_style=c["panel_border"],
         expand=False,
         highlight=False,
     )

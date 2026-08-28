@@ -22,11 +22,11 @@ def render_banner(manager: ThemeManager, width: Optional[int] = None) -> Panel:
     """Build the startup banner as a rich Panel."""
     compact = compact_mode(width)
     title = "WEBBEHAVIOR LAB" if compact else _APP_TITLE
-    lines = [Text(title, style="banner bold")]
+    lines = [Text(title, style="bold " + manager.style("banner"))]
     if not compact:
-        lines.append(Text(_APP_SUBTITLE, style="primary"))
+        lines.append(Text(_APP_SUBTITLE, style=manager.style("primary")))
         lines.append(Text(""))
-    lines.append(Text(_APP_TAGLINE, style="muted"))
+    lines.append(Text(_APP_TAGLINE, style=manager.style("muted")))
     body = Text("\n").join(lines)
     return Panel(
         body,
