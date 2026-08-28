@@ -84,32 +84,29 @@ def doctor_checks() -> List[CheckResult]:
     )
 
     try:
+        from importlib.metadata import version as _pkg_version
+
         import rich  # noqa: F401
 
-        results.append(CheckResult("Rich", True, f"v{rich.__version__}"))
+        results.append(CheckResult("Rich", True, f"v{_pkg_version('rich')}"))
     except Exception as exc:  # pragma: no cover - depends on environment
         results.append(CheckResult("Rich", False, str(exc)))
 
-    playwright_ok = False
     try:
-        from playwright.sync_api import sync_playwright
+        from playwright.sync_api import sync_playwright  # noqa: F401
 
-        with sync_playwright() as pw:
-            executable = pw.chromium.executable_path
-            browser_ok = bool(executable) and os.path.exists(str(executable))
         results.append(CheckResult("Playwright", True))
         playwright_ok = True
     except Exception as exc:
         results.append(CheckResult("Playwright", False, str(exc)))
+        playwright_ok = False
 
-    browser_ok = False
     if playwright_ok:
         try:
             from webbehavior.browser.launcher import find_browser_executable
 
             executable = find_browser_executable()
             if executable:
-                browser_ok = True
                 results.append(CheckResult("Browser", True, executable))
             else:  # pragma: no cover - depends on environment
                 results.append(

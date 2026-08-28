@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import time
 from contextlib import contextmanager
-from typing import Iterator, Optional
+from typing import Iterator
 
 from webbehavior.browser.launcher import BrowserError, build_launch_options, install_hint
 from webbehavior.monitoring.logger import get_logger

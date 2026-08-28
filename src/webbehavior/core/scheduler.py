@@ -13,7 +13,7 @@ import time
 from dataclasses import dataclass
 from typing import Iterator
 
-from webbehavior.core.limiter import HARD_MAX_SESSIONS, MIN_SESSIONS, validate_session_count
+from webbehavior.core.limiter import HARD_MAX_SESSIONS, validate_session_count
 
 MIN_INTER_SESSION_DELAY_S = 0.25  # safety pacing floor
 

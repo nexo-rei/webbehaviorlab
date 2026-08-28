@@ -55,14 +55,36 @@ def find_browser_executable() -> Optional[str]:
     """Return the first existing Chromium/Chrome executable, else ``None``.
 
     Prefers an explicit env override, then Termux packages, then distro
-    packages. Playwright's own downloaded Chromium is handled by Playwright
-    itself and is not needed here.
+    packages, then Playwright's own downloaded Chromium.
     """
     for candidate in _candidate_executables():
         if candidate and shutil.which(candidate):
             return candidate
         if candidate and Path(candidate).is_file() and os.access(candidate, os.X_OK):
             return candidate
+    return playwright_chromium_path()
+
+
+def playwright_chromium_path() -> Optional[str]:
+    """Locate Playwright's downloaded Chromium without starting a driver.
+
+    Purely filesystem-based so ``webbehavior doctor`` stays quiet and fast.
+    """
+    roots = []
+    env_override = os.environ.get("PLAYWRIGHT_BROWSERS_PATH", "").strip()
+    if env_override:
+        roots.append(Path(env_override))
+    cache = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
+    roots.append(Path(cache) / "ms-playwright")
+    for root in roots:
+        if not root.is_dir():
+            continue
+        for chromium_dir in sorted(root.glob("chromium*"), reverse=True):
+            for rel in ("chrome-linux/chrome", "chrome-linux/headless_shell",
+                        "chrome-android/chrome", "chrome-android/headless_shell"):
+                candidate = chromium_dir / rel
+                if candidate.is_file() and os.access(str(candidate), os.X_OK):
+                    return str(candidate)
     return None
 
 

@@ -13,12 +13,11 @@ The validator never opens network connections - it is pure parsing.
 
 from __future__ import annotations
 from typing import Optional
-from urllib.parse import urlsplit, quote
+from urllib.parse import urlsplit
 
 from webbehavior.utils.network import (
     display_host,
     has_userinfo,
-    host_of,
     is_local_target,
     split_url,
 )
@@ -164,6 +163,3 @@ def redact_url_for_display(url: str) -> str:
         return parts._replace(query="…").geturl()
     return url
 
-
-# ``quote`` re-exported for callers that build safe URLs from host input.
-__all__.append("quote")

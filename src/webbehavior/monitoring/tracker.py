@@ -8,8 +8,8 @@ piped output) without touching the engine.
 from __future__ import annotations
 
 import threading
-from dataclasses import dataclass, field
-from typing import Callable, Dict, List, Optional
+from dataclasses import dataclass
+from typing import Callable, Dict, List
 
 from webbehavior.utils.helpers import clamp
 
