@@ -1,0 +1,23 @@
+{
+  "max_sessions": 10,
+  "animation": true,
+  "animation_speed": "normal",
+  "theme": "default",
+  "browser": {
+    "headless": true
+  },
+  "timeouts": {
+    "page_load_ms": 30000
+  },
+  "pacing": {
+    "inter_session_delay_ms": 800,
+    "action_delay_ms": 400
+  },
+  "actions": [
+    "page_load",
+    "wait",
+    "scroll_down",
+    "scroll_up",
+    "return_to_top"
+  ]
+}
